@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futbalík Live</title>
+    <style>
+        :root {
+            --bg-color: #0b130e;
+            --card-bg: #142219;
+            --accent-color: #22c55e;
+            --text-main: #f0fdf4;
+            --text-muted: #86efac;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #091a10;
+            border-bottom: 2px solid var(--accent-color);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .leagues-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .league-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .league-link:hover {
+            background-color: #11261a;
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .date-selector {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .date-btn {
+            background-color: var(--card-bg);
+            border: 1px solid #1b3d29;
+            color: var(--text-main);
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .date-btn.active, .date-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border-color: var(--accent-color);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .match-card {
+            background-color: var(--card-bg);
+            border: 1px solid #1b3d29;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .league-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .teams-container {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .score-box {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: #09140f;
+            padding: 6px 14px;
+            border-radius: 6px;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .score-box.live {
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        .score-box.finished {
+            color: var(--accent-color);
+        }
+
+        .score-box.scheduled {
+            color: #a7f3d0;
+            font-size: 0.95rem;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="logo">Futbalík Live</a>
+        <div class="leagues-nav">
+            <a href="/tabulka/PL" class="league-link">Premier League</a>
+            <a href="/tabulka/PD" class="league-link">La Liga</a>
+            <a href="/tabulka/CL" class="league-link">Liga Majstrov</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="date-selector">
+        {% for d in dni_menu %}
+            <a href="/?date={{ d.datum_url }}" class="date-btn {% if d.datum_url == aktualny_datum %}active{% endif %}">
+                {{ d.pekny_nazov }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <h2>Zápasy dňa ({{ povedz_datum }})</h2>
+
+    {% if zápasy %}
+        {% for z in zápasy %}
+            <div class="match-card">
+                <div class="match-header">
+                    <div>
+                        <div class="league-tag">{{ z.league }}</div>
+                        <div class="teams-container">{{ z.homeTeam.name }} vs {{ z.awayTeam.name }}</div>
+                    </div>
+                    
+                    {% if z.status == 'LIVE' %}
+                        <div class="score-box live">
+                            {{ z.score.home }} : {{ z.score.away }}
+                            <div style="font-size: 0.65rem; text-align: center; margin-top: 2px;">{{ z.minute }}</div>
+                        </div>
+                    {% elif z.status == 'FINISHED' %}
+                        <div class="score-box finished">
+                            {{ z.score.home }} : {{ z.score.away }}
+                            <div style="font-size: 0.6rem; color: var(--text-muted); text-align: center; margin-top: 2px; font-weight: normal;">Koniec</div>
+                        </div>
+                    {% else %}
+                        <div class="score-box scheduled">
+                            {{ z.minute }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center; color: var(--text-muted); margin-top: 40px;">Na tento deň nie sú naplánované žiadne zápasy zo sledovaných líg.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

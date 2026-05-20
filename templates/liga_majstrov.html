@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liga Majstrov - Tabuľka a Play-off</title>
+    <style>
+        :root {
+            --bg-color: #0b130e;
+            --card-bg: #142219;
+            --accent-color: #eab308; 
+            --green-accent: #22c55e;
+            --text-main: #f0fdf4;
+            --text-muted: #86efac;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #091a10;
+            border-bottom: 2px solid var(--accent-color);
+            padding: 15px 20px;
+        }
+
+        .navbar-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .back-btn {
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: #11261a;
+            border: 1px solid #1b3d29;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            color: var(--green-accent);
+            border-bottom: 1px solid #1b3d29;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table-container, .playoff-container {
+            background-color: var(--card-bg);
+            border: 1px solid #1b3d29;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #1b3d29;
+        }
+
+        th {
+            background-color: #09140f;
+            color: var(--accent-color);
+        }
+
+        tr:hover {
+            background-color: #1c3326;
+        }
+
+        .team-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .team-link:hover {
+            color: var(--green-accent);
+        }
+
+        /* Upravená vyraďovacia karta zápasu pre klikanie */
+        .playoff-match-card {
+            border-bottom: 1px solid #1b3d29;
+            overflow: hidden;
+        }
+
+        .playoff-match-card:last-child {
+            border-bottom: none;
+        }
+
+        .playoff-match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .playoff-match-header:hover {
+            background-color: #1c3326;
+        }
+
+        .match-stage {
+            font-size: 0.8rem;
+            background-color: #09140f;
+            color: var(--accent-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .match-detail {
+            display: none;
+            background-color: #0e1a13;
+            padding: 12px 20px;
+            border-top: 1px solid #1b3d29;
+            font-size: 0.9rem;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .goal-item {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="logo">Liga Majstrov UEFA</a>
+        <a href="/" class="back-btn">Domov</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Tabuľka ligovej fázy</h2>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tím</th>
+                    <th>Z</th>
+                    <th>V</th>
+                    <th>R</th>
+                    <th>P</th>
+                    <th>Skóre</th>
+                    <th>Body</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in tabulka %}
+                <tr>
+                    <td><strong>{{ r.position }}</strong></td>
+                    <td><a href="/tabulka/tim/{{ r.team.id }}" class="team-link">{{ r.team.name }}</a></td>
+                    <td>{{ r.playedGames }}</td>
+                    <td>{{ r.won }}</td>
+                    <td>{{ r.draw }}</td>
+                    <td>{{ r.lost }}</td>
+                    <td>{{ r.goalsFor }}:{{ r.goalsAgainst }}</td>
+                    <td><strong style="color: var(--accent-color);">{{ r.points }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title">Vyraďovacia fáza (Play-off)</div>
+    <div class="playoff-container">
+        {% if vyradovacie_zapasy %}
+            {% for m in vyradovacie_zapasy %}
+            <div class="playoff-match-card">
+                <div class="playoff-match-header" onclick="toggleZapasDetail('{{ m.id if m.id else 0 }}', this)">
+                    <div>
+                        <span class="match-stage">{{ m.faza_sk }}</span>
+                        <span style="margin-left: 10px; font-weight: 600;">{{ m.homeTeam.name }} vs {{ m.awayTeam.name }}</span>
+                    </div>
+                    <div style="font-weight: bold; color: var(--green-accent);">
+                        {% if m.score_home is not none %}{{ m.score_home }} : {{ m.score_away }}{% else %}Plánované{% endif %}
+                    </div>
+                </div>
+                <div class="match-detail">
+                    <div class="loading-spinner">Načítavam strelcov gólov...</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="padding: 20px; text-align: center; color: var(--text-muted);">
+                Zápasy vyraďovacej fázy zatiaľ nie sú vyžrebované.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleZapasDetail(zapasId, headerElement) {
+    const detailDiv = headerElement.nextElementSibling;
+    
+    if (detailDiv.style.display === 'block') {
+        detailDiv.style.display = 'none';
+        return;
+    }
+    
+    detailDiv.style.display = 'block';
+    if (zapasId === '0' || !zapasId) {
+        detailDiv.innerHTML = '<div style="color: var(--text-muted);">Pre tento zápas nie je ID dostupné.</div>';
+        return;
+    }
+    
+    fetch(`/api/zapas/${zapasId}`)
+        .then(response => response.json())
+        .then(data => {
+            let goalsHtml = '';
+            if (data.goals && data.goals.length > 0 && !data.goals[0].includes("Žiadne góly alebo API nedodalo")) {
+                data.goals.forEach(goal => {
+                    let cleanGoal = goal.replace('⚽', '').trim();
+                    goalsHtml += `<div class="goal-item">${cleanGoal}</div>`;
+                });
+            } else {
+                goalsHtml = '<div style="color: #6ee7b7; opacity: 0.7;">Detaily gólov nie sú k dispozícii (zápas sa ešte neodohral alebo bezplatné API nedodalo štatistiku).</div>';
+            }
+
+            detailDiv.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted);">Strelci gólov:</div>
+                ${goalsHtml}
+                <div style="margin-top: 12px; font-size: 0.8rem; color: #6ee7b7; opacity: 0.8; border-top: 1px solid #1b3d29; padding-top: 8px;">
+                    Štadión: ${data.venue || 'Neznámy'} | Rozhodca: ${data.referee || 'Neznámy'}
+                </div>
+            `;
+        })
+        .catch(error => {
+            detailDiv.innerHTML = '<div style="color: #ef4444;">Nepodarilo sa načítať detaily.</div>';
+        });
+}
+</script>
+
+</body>
+</html>
