@@ -142,7 +142,7 @@ def profil_timu(tim_id):
     if tim_id in RUČNÉ_SÚPISKY:
         data_supisky = RUČNÉ_SÚPISKY[tim_id]
         
-        # Ak je súpiska slovník a obsahuje kľúč "players" (ako tvoj Manchester City)
+        # Ak je súpiska slovník and obsahuje kľúč "players" (ako tvoj Manchester City)
         if isinstance(data_supisky, dict) and "players" in data_supisky:
             tim_data["squad"] = data_supisky["players"]
             # Ak si v súbore zadefinoval aj "manager", automaticky prepíšeme meno trénera
@@ -160,6 +160,7 @@ def profil_timu(tim_id):
             pekny_datum = datetime.strptime(datum_raw, "%Y-%m-%dT%H:%M:%SZ").strftime("%d.%m.%Y") if datum_raw else ""
             
             zapas_info = {
+                "id": m.get("id"),  # 🔥 OPRAVENÉ: Pridané ID zápasu pre odohrané zápasy
                 "datum": pekny_datum,
                 "sutaz": m.get("competition", {}).get("name", "Súťaž"),
                 "homeTeam": m.get("homeTeam", {}).get("name", "Neznámy"),
@@ -170,6 +171,7 @@ def profil_timu(tim_id):
             if status == "FINISHED":
                 odohrane.append(zapas_info)
             else:
+                zapas_info["id"] = m.get("id")  # 🔥 OPRAVENÉ: Pridané ID zápasu pre naplánované zápasy
                 zapas_info["cas"] = datetime.strptime(datum_raw, "%Y-%m-%dT%H:%M:%SZ").strftime("%H:%M") if datum_raw else ""
                 naplanovane.append(zapas_info)
         odohrane.reverse()
