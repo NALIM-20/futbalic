@@ -3,32 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futbalík - Výsledky a Tabuľky</title>
+    <title>futbalic - Výsledky a Tabuľky</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #0b130e;        /* Veľmi tmavá zeleno-čierna */
-            --card-bg: #142219;         /* Tmavozelená pre karty */
-            --accent-color: #22c55e;    /* Žiarivá futbalová zelená */
-            --accent-hover: #16a34a;    /* Tmavšia zelená pri prejdení myšou */
-            --text-main: #f0fdf4;       /* Jemne zelenkastá biela pre text */
-            --text-muted: #86efac;      /* Svetlozelená pre menej dôležitý text */
-            --live-color: #ef4444;      /* Červená pre LIVE stav */
+            --bg-color: #0c1017;         /* Veľmi tmavá bridlicovo-modrá */
+            --navbar-bg: #121722;       /* Tmavé menu */
+            --card-bg: #161c28;         /* Podklad pre zápasové karty */
+            --card-hover: #1f2736;      /* Prejdenie myšou po zápase */
+            --accent-blue: #2563eb;     /* Profesionálna kráľovská modrá */
+            --accent-hover: #1d4ed8;    /* Tmavšia modrá */
+            --text-main: #f3f4f6;       /* Čistá svetlá pre dôležitý text */
+            --text-muted: #9ca3af;      /* Sivá pre popisy a skratky */
+            --live-color: #ef4444;      /* Výrazná červená pre LIVE indikátor */
+            --border-color: #242f42;    /* Jemné moderné ohraničenie panelov */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             padding: 0;
         }
 
-        /* Navigačné menu líg na vrchu */
+        /* Hlavná navigácia líg */
         .navbar {
-            background-color: #091a10;
-            border-bottom: 2px solid var(--accent-color);
-            padding: 15px 20px;
+            background-color: var(--navbar-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -45,228 +48,274 @@
         }
 
         .logo {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--accent-color);
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--text-main);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logo span {
+            color: var(--accent-blue);
         }
 
         .nav-links {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .nav-item {
-            color: var(--text-main);
+            color: var(--text-muted);
             text-decoration: none;
             padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
             font-weight: 600;
-            background-color: #11261a;
-            border: 1px solid #1b3d29;
-            transition: all 0.2s ease;
+            background-color: #1a2232;
+            border: 1px solid var(--border-color);
+            transition: all 0.15s ease;
         }
 
         .nav-item:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            border-color: var(--accent-color);
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
         }
 
         .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 750px;
+            margin: 25px auto;
+            padding: 0 16px;
         }
 
-        /* Kalendár / Menu dní */
+        /* Menu dní - Upratané do lišty */
         .date-menu {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
+            justify-content: flex-start;
+            gap: 6px;
+            margin-bottom: 20px;
             overflow-x: auto;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Skrytie scrollbaru pre čistý dizajn */
+        .date-menu::-webkit-scrollbar {
+            height: 4px;
+        }
+        .date-menu::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 2px;
         }
 
         .date-btn {
-            background-color: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid #1b3d29;
-            padding: 10px 15px;
-            border-radius: 8px;
+            background-color: #1a2232;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 4px;
             text-decoration: none;
+            font-size: 0.85rem;
             font-weight: 600;
             white-space: nowrap;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
         }
 
         .date-btn:hover {
-            border-color: var(--accent-color);
+            border-color: var(--text-muted);
+            color: var(--text-main);
         }
 
         .date-btn.active {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            border-color: var(--accent-color);
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
         }
 
         .datum-nadpis {
-            text-align: center;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
-        /* Karta zápasu */
+        .datum-nadpis strong {
+            color: var(--text-main);
+        }
+
+        /* Profesionálna karta zápasu v štýle Flashscore */
         .match-card {
             background-color: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #1b3d29;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .match-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
+            padding: 12px 16px;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.15s ease;
         }
 
         .match-header:hover {
-            background-color: #1c3326;
+            background-color: var(--card-hover);
         }
 
-        .league-tag {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .match-info {
-            flex: 1;
-        }
-
-        .teams-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .score-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            min-width: 40px;
-        }
-
+        /* Čas a stav zápasu naľavo */
         .match-status {
-            text-align: center;
-            min-width: 80px;
-            padding: 5px 10px;
-            border-radius: 6px;
-            background-color: #09140f;
+            width: 65px;
+            min-width: 65px;
             font-size: 0.85rem;
-            font-weight: bold;
-            margin-left: 20px;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .status-live {
             color: var(--live-color);
+        }
+
+        .status-live i {
+            font-size: 0.65rem;
+            vertical-align: middle;
+            margin-right: 3px;
             animation: pulse 1.5s infinite;
         }
 
         .status-finished {
             color: var(--text-muted);
-            opacity: 0.8;
+            font-weight: 500;
         }
 
         .status-scheduled {
-            color: var(--accent-color);
+            color: var(--accent-blue);
         }
 
-        /* Skrytý detail zápasu */
+        /* Názvy tímov pod sebou */
+        .match-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 10px;
+            border-left: 1px solid var(--border-color);
+        }
+
+        .league-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            letter-spacing: 0.02em;
+        }
+
+        .teams-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Vertikálne skóre priradené k riadkom tímov */
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-width: 35px;
+            text-align: center;
+            font-family: monospace, sans-serif;
+        }
+        
+        .score-row {
+            height: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Detail zápasu */
         .match-detail {
             display: none;
-            background-color: #0e1a13;
-            padding: 15px 20px;
-            border-top: 1px solid #1b3d29;
-            font-size: 0.95rem;
-            animation: fadeIn 0.3s ease;
+            background-color: #10151f;
+            padding: 14px 16px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            animation: fadeIn 0.2s ease;
         }
 
         .detail-section {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .detail-title {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 8px;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .goal-item {
-            margin: 5px 0;
+            margin: 6px 0;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #d1d5db;
         }
 
         .loading-spinner {
             text-align: center;
             color: var(--text-muted);
-            padding: 10px 0;
+            padding: 8px 0;
+            font-size: 0.85rem;
         }
 
         @keyframes pulse {
             0% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.3; }
             100% { opacity: 1; }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
+            from { opacity: 0; transform: translateY(-3px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
+<!-- HLAVNÉ MENU -->
 <nav class="navbar">
     <div class="navbar-container">
-        <a href="/" class="logo"><i class="fa-solid fa-soccer-ball"></i> Futbalík Live</a>
+        <a href="/" class="logo">futbal<span>ic</span></a>
         <div class="nav-links">
             <a href="/tabulka/PL" class="nav-item">Anglicko (PL)</a>
             <a href="/tabulka/PD" class="nav-item">Španielsko (La Liga)</a>
             <a href="/tabulka/BL1" class="nav-item">Nemecko (Bundesliga)</a>
             <a href="/tabulka/SA" class="nav-item">Taliansko (Serie A)</a>
             <a href="/tabulka/FL1" class="nav-item">Francúzsko (Ligue 1)</a>
-            <a href="/tabulka/CL" class="nav-item" style="border-color: #eab308; color: #eab308;"><i class="fa-solid fa-star"></i> Liga Majstrov</a>
+            <a href="/tabulka/CL" class="nav-item" style="border-color: #d97706; color: #fbbf24; background-color: #291e10;"><i class="fa-solid fa-star"></i> Liga Majstrov</a>
         </div>
     </div>
 </nav>
 
 <div class="container">
+    <!-- KALENDÁR -->
     <div class="date-menu">
         {% for den in dni_menu %}
             <a href="/?date={{ den.datum_url }}" class="date-btn {% if den.datum_url == aktualny_datum %}active{% endif %}">
@@ -277,11 +326,25 @@
 
     <div class="datum-nadpis">Zápasy pre deň: <strong>{{ povedz_datum }}</strong></div>
 
+    <!-- ZOZNAM ZÁPASOV -->
     <div class="matches-list">
         {% if zápasy %}
             {% for z in zápasy %}
                 <div class="match-card" id="card-{{ z.id }}">
                     <div class="match-header" onclick="toggleZapasDetail('{{ z.id }}')">
+                        
+                        <!-- Stav / Čas (Vľavo) -->
+                        <div class="match-status">
+                            {% if z.status == 'LIVE' %}
+                                <span class="status-live"><i class="fa-solid fa-circle"></i>{{ z.minute }}</span>
+                            {% elif z.status == 'FINISHED' %}
+                                <span class="status-finished">Koniec</span>
+                            {% else %}
+                                <span class="status-scheduled">{{ z.minute }}</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Tímy (V strede) -->
                         <div class="match-info">
                             <span class="league-tag">{{ z.league }}</span>
                             <div class="teams-container">
@@ -290,29 +353,22 @@
                             </div>
                         </div>
 
+                        <!-- Skóre (Vpravo - zarovnané k riadkom tímov) -->
                         <div class="score-container">
-                            <div>{% if z.score.home is not none %}{{ z.score.home }}{% else %}-{% endif %}</div>
-                            <div>{% if z.score.away is not none %}{{ z.score.away }}{% else %}-{% endif %}</div>
+                            <div class="score-row">{% if z.score.home is not none %}{{ z.score.home }}{% else %}-{% endif %}</div>
+                            <div class="score-row">{% if z.score.away is not none %}{{ z.score.away }}{% else %}-{% endif %}</div>
                         </div>
 
-                        <div class="match-status">
-                            {% if z.status == 'LIVE' %}
-                                <span class="status-live"><i class="fa-solid fa-circle"></i> {{ z.minute }}</span>
-                            {% elif z.status == 'FINISHED' %}
-                                <span class="status-finished">Koniec</span>
-                            {% else %}
-                                <span class="status-scheduled">{{ z.minute }}</span>
-                            {% endif %}
-                        </div>
                     </div>
 
+                    <!-- Skrytý Detail zápasu -->
                     <div class="match-detail" id="detail-{{ z.id }}">
                         <div class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i> Načítavam strelcov gólov...</div>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-            <div style="text-align: center; color: var(--text-muted); background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #1b3d29;">
+            <div style="text-align: center; color: var(--text-muted); background: var(--card-bg); padding: 24px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.95rem;">
                 Dnes nie sú na programe žiadne zápasy z podporovaných líg.
             </div>
         {% endif %}
@@ -335,13 +391,12 @@ function toggleZapasDetail(zapasId) {
         .then(data => {
             let goalsHtml = '';
             
-            // OŠETRENIE PRE API CHYBY: Ak nám API vráti prázdne pole alebo správu o chýbajúcich detailoch
             if (data.goals && data.goals.length > 0 && !data.goals[0].includes("Žiadne góly alebo API nedodalo")) {
                 data.goals.forEach(goal => {
                     goalsHtml += `<div class="goal-item">${goal}</div>`;
                 });
             } else {
-                goalsHtml = '<div style="color: #6ee7b7; opacity: 0.7;">Žiadne detaily gólov (Zápas ešte nezačal alebo bezplatné API nedodalo strelcov).</div>';
+                goalsHtml = '<div style="color: var(--text-muted); opacity: 0.7; font-size: 0.85rem;">Žiadne detaily gólov (Zápas ešte nezačal alebo bezplatné API nedodalo strelcov).</div>';
             }
 
             detailDiv.innerHTML = `
@@ -349,7 +404,7 @@ function toggleZapasDetail(zapasId) {
                     <div class="detail-title"><i class="fa-solid fa-soccer-ball"></i> Strelci gólov</div>
                     ${goalsHtml}
                 </div>
-                <div class="detail-section" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.85rem; color: #6ee7b7; opacity: 0.8;">
+                <div class="detail-section" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.8rem; color: var(--text-muted);">
                     <div><i class="fa-solid fa-location-dot"></i> Štadión: ${data.venue || 'Neznámy'}</div>
                     <div><i class="fa-solid fa-user-tie"></i> Rozhodca: ${data.referee || 'Neznámy'}</div>
                 </div>
@@ -357,7 +412,7 @@ function toggleZapasDetail(zapasId) {
         })
         .catch(error => {
             console.error('Chyba:', error);
-            detailDiv.innerHTML = '<div style="color: var(--live-color);">Nepodarilo sa načítať detaily (Vyčerpaný API limit).</div>';
+            detailDiv.innerHTML = '<div style="color: var(--live-color); font-size: 0.85rem;">Nepodarilo sa načítať detaily (Vyčerpaný API limit).</div>';
         });
 }
 </script>
